@@ -46,6 +46,7 @@ namespace RazorPageWebApp.Controllers
 
                     var username = HttpContext.Session.GetString("username");
 
+
                     return RedirectToPage("Index");
                 }
             }
