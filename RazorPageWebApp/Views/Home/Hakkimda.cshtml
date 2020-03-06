@@ -1,0 +1,12 @@
+﻿@model  RazorPageWebApp.Models.UserModel
+<h1>Benden selam olsun size.</h1>
+
+<form asp-action="Hakkimda" asp-controller="Home">
+    <label asp-for="UserName">Kullanıcı</label>
+    <input asp-for="UserName" />
+</form>
+
+@using (Html.BeginForm("Hakkimda", "Home")) {
+    @Html.LabelFor(m => m.UserName, "Kullanıcı 2")
+    @Html.TextBoxFor(m => m.UserName)
+}

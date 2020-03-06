@@ -1,0 +1,49 @@
+﻿@page
+@model RazorPageWebApp.DefaultModel
+@{
+    ViewData["Title"] = "Default";
+    Layout = "_Layout";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form method="post" asp-page-handler="Signin">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+
+                    @*<select asp-items="@ViewData["Country"].ToString()">
+                            <option>Please select one</option>
+                        </select>*@
+
+                </div>
+                <div class="form-group">
+
+                    @*<select asp-items="@ViewData["Country"].ToString()">
+                            <option>Please select one</option>
+                        </select>*@
+                
+
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success" asp-page-handler="Signin">Login</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

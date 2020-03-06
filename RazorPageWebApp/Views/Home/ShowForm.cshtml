@@ -1,0 +1,129 @@
+﻿@model RazorPageWebApp.Models.ShowFormViewModel
+
+<div class="container">
+    <div class="col-md-4">
+        <form asp-action="CreateForm" asp-controller="Home">
+            <label asp-for="CountryId">Ülke Seçin</label>
+
+            <select asp-for="CountryId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.CountryList,"Id","Name"))" onchange="onCountryChange()">
+                <option>--Seçiniz--</option>
+            </select>
+            <br />
+            <label asp-for="CityId">Şehir Seçin</label>
+
+            <select asp-for="CityId" class="form-control" onchange="onCityChange()">
+                <option>--Seçiniz--</option>
+            </select>
+            <br />
+            <label asp-for="DistrictId">İlçe Seçin</label>
+
+            <select asp-for="DistrictId" class="form-control" onchange="onDistrictChange()">
+                <option>--Seçiniz--</option>
+            </select>
+        </form>
+        <div id="Result"></div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+
+        function onCountryChange() {
+            var selectedCountryId = $("#CountryId").val();
+            if (!selectedCountryId) {
+                return;
+            }
+
+            $("#CityId").empty().append("<option>--Seçiniz--</option>");
+            $("#DistrictId").empty().append("<option>--Seçiniz--</option>");
+             $("#Result").empty();
+
+            var sData = { cityParentId: selectedCountryId };
+            $.ajax({
+                //url: "Home/GetCityList",
+
+                url: "@Url.Action("GetCityList", "Home")",
+                data: sData,
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    $.each(result, function (index, value) {
+                        $("#CityId").append($('<option/>', {
+                            value: value.id,
+                            text : value.name
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus) {
+                    alert("Hata meydana geldi.");
+                }
+            });
+        }
+
+
+
+         function onCityChange() {
+            var selectedCityId = $("#CityId").val();
+            if (!selectedCityId) {
+                return;
+            }
+
+             $("#DistrictId").empty().append("<option>--Seçiniz--</option>");
+              $("#Result").empty();
+
+            var ssData = { districtParentId: selectedCityId };
+            $.ajax({
+                //url: "Home/GetCityList",
+                url: "@Url.Action("GetDistrictList", "Home")",
+                data: ssData,
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    $.each(result, function (index, value) {
+                        $("#DistrictId").append($('<option/>', {
+                            value: value.id,
+                            text : value.name
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus) {
+                    alert("Hata meydana geldi.");
+                }
+            });
+        }
+
+
+        function onDistrictChange()
+        {
+            $("#Result").empty();
+
+            var sData = {
+                countryName: $("#CountryId option:selected").text(),
+                cityName: $("#CityId option:selected").text(),
+                districtName: $("#DistrictId option:selected").text()
+            };
+
+            $.ajax({
+                url: "/Home/DistrictChange",
+                data: sData,
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                 success: function (result) {
+                   $("#Result").append( result );
+                },
+
+                error: function (jqXHR, textStatus) {
+                    alert("Hata meydana geldi.");
+                }
+            });
+        }
+
+
+    </script>
+}
